@@ -83,6 +83,7 @@ class MetricLogger(object):
 
     def log_every(self, iterable, print_freq, header=None):
         i = 0
+        fg=0
         if not header:
             header = ''
         start_time = time.time()
@@ -90,6 +91,7 @@ class MetricLogger(object):
         iter_time = SmoothedValue(fmt='{avg:.4f}')
         data_time = SmoothedValue(fmt='{avg:.4f}')
         space_fmt = ':' + str(len(str(len(iterable)))) + 'd'
+        
         if torch.cuda.is_available():
             log_msg = self.delimiter.join([
                 header,
@@ -100,7 +102,9 @@ class MetricLogger(object):
                 'data: {data}',
                 'max mem: {memory:.0f}'
             ])
+    
         else:
+            print('cpu')
             log_msg = self.delimiter.join([
                 header,
                 '[{0' + space_fmt + '}/{1}]',

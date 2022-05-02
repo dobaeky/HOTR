@@ -45,6 +45,7 @@ class VCocoDetection(Dataset):
         # Save COCO annotation data
         self.image_ids = sorted(list(set(self.vcoco_all[0]['image_id'].reshape(-1))))
 
+
         # Filter Data
         if filter_empty_gt:
             self.filter_image_id()
@@ -76,7 +77,7 @@ class VCocoDetection(Dataset):
     def save_action_name(self):
         self.inst_act_list = list()
         self.act_list = list()
-
+        non_role_num=0
         # add instance action human classes
         self.num_subject_act = 0
         for vcoco in self.vcoco_all:
@@ -89,6 +90,7 @@ class VCocoDetection(Dataset):
                 self.inst_act_list.append('object_' + vcoco['action_name']+'_'+vcoco['role_name'][1])
                 self.inst_act_list.append('object_' + vcoco['action_name']+'_'+vcoco['role_name'][2])
             elif len(vcoco['role_name']) < 2:
+                non_role_num +=1
                 continue
             else:
                 self.inst_act_list.append('object_' + vcoco['action_name']+'_'+vcoco['role_name'][-1]) # when only two roles
@@ -313,7 +315,8 @@ class VCocoDetection(Dataset):
         for img_id in self.image_ids:
             if not self.sum_action_ann_for_id(img_id):
                 empty_gt_list.append(img_id)
-
+        print('empty ground-truth list------- %d' %len(empty_gt_list))
+        print(empty_gt_list)
         for remove_id in empty_gt_list:
             rm_idx = self.image_ids.index(remove_id)
             self.image_ids.remove(remove_id)

@@ -148,6 +148,7 @@ class APRole(object):
                 self.fp[label] = np.append(self.fp[label], f)
 
     def evaluate(self, print_log=False):
+        #pt_cnt=0
         average_precisions = dict()
         role_num = 1 if self.scenario_flag else 2
         for label in range(len(self.act_name)):
@@ -165,7 +166,8 @@ class APRole(object):
             # compute false positives and true positives
             self.fp[label] = np.cumsum(self.fp[label])
             self.tp[label] = np.cumsum(self.tp[label])
-
+            #print('hoxy?????????????')
+            #print(self.fp)
             # compute recall and precision
             recall    = self.tp[label] / self.num_ann[label]
             precision = self.tp[label] / np.maximum(self.tp[label] + self.fp[label], np.finfo(np.float64).eps)
@@ -175,19 +177,25 @@ class APRole(object):
 
         if print_log: print(f'\n============= AP (Role scenario_{role_num}) ==============')
         s, n = 0, 0
-
+        #print(self.act_name)
+        rest=0
         for label in range(len(self.act_name)):
             if 'point' in self.act_name[label]:
+                #pt_cnt+=1
                 continue
             label_name = "_".join(self.act_name[label].split("_")[1:])
             if print_log: print('{: >23}: AP = {:0.2f} (#pos = {:d})'.format(label_name, average_precisions[label], self.num_ann[label]))
             if self.num_ann[label] != 0 :
                 s += average_precisions[label]
                 n += 1
+            else:
+                rest += 1
+
 
         mAP = s/n
         if print_log:
             print('| mAP(role scenario_{:d}): {:0.2f}'.format(role_num, mAP))
             print('----------------------------------------------------')
-
+            #print("point %d" %pt_cnt) #1
+            print("rest %d" %rest)
         return mAP
