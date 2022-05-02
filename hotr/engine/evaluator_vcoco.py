@@ -44,9 +44,7 @@ def vcoco_evaluate(model, criterion, postprocessors, data_loader, device, output
 
     metric_logger = loggers.MetricLogger(mode="test", delimiter="  ")
     header = 'Evaluation Inference (V-COCO)'
-    ##print('----data_loader len----')
-    ##print(len(data_loader))
-    #print(type(data_loader)) #<class 'torch.utils.data.dataloader.DataLoader'>
+
     print_freq = 1 # len(data_loader)
     res = {}
     hoi_recognition_time = []
@@ -114,7 +112,7 @@ def vcoco_evaluate(model, criterion, postprocessors, data_loader, device, output
                 draw.rectangle((int(res[img_name]['target']['boxes'][i,0]),int(res[img_name]['target']['boxes'][i,1]),int(res[img_name]['target']['boxes'][i,2]),int(res[img_name]['target']['boxes'][i,3])),outline=(50,150,50), width=3)
         
         
-        #print(torch.where(res[26624]['target']['pair_targets']>0)) # (tensor([1, 3], device='cuda:0'),)
+
         if res[img_name]['target']['pair_targets'].size(dim=0) == 1 and res[img_name]['target']['pair_targets'][0]==-1:
             for i in torch.where(res[img_name]['target']['pair_actions'][i]>0)[0]:
                 txt_pos=(0,int(res[img_name]['target']['orig_size'][0]-22*t_i))
@@ -123,16 +121,10 @@ def vcoco_evaluate(model, criterion, postprocessors, data_loader, device, output
         else:
             for i in torch.where(res[img_name]['target']['pair_targets']>0)[0]: #es[26624]['target']['pair_targets']>0)[0] = tensor([1,3])
                 
-                #print(torch.where(res[img_name]['target']['pair_actions'][i]>0))
-                #= [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                # 0, 0, 0, 0, 0] -> so (tensor([5]),)
-                for j in torch.where(res[img_name]['target']['pair_actions'][i]>0)[0]: #i=0,2 
-                #i=1 ) j=res[26624][]... = 5
-                    #print(res[26624]['target']['orig_size'])
-                    #print(res[26624]['target']['orig_size'][0])
-                    #print(res[26624]['target']['orig_size'][1])
+
+                for j in torch.where(res[img_name]['target']['pair_actions'][i]>0)[0]:
+
                     txt_pos=(0,int(res[img_name]['target']['orig_size'][0]-22*t_i))
-                    #print(txt_pos)
                     draw.text(txt_pos,'person '+vcoco_cls[j]+' '+coco_cls[res[img_name]['target']['pair_targets'][i]],(0,0,255),font=font)
                     if vcoco_cls[j]=='carry':
                         carry_set.add(img_name)
@@ -168,10 +160,6 @@ def vcoco_evaluate(model, criterion, postprocessors, data_loader, device, output
         img_a.save(img_output_path)
         print(img_name)
 
-    #print(len(carry_set))
-    #print(len(skate_set))
-    #print(carry_set)
-    #print(skate_set)
     file_carry=open('carry_ids.txt','w')
     file_skate=open('skate_ids.txt','w')
     file_skate.write('skate_ids\n')
