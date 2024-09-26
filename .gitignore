@@ -129,3 +129,12 @@ dmypy.json
 .pyre/
 wandb/
 checkpoints/
+
+resize.jpg
+skate.jpg
+skate_ids.txt
+test.jpg
+carry.jpg
+carry_ids.txt
+v-coco/
+results_imgs/

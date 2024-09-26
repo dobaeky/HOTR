@@ -60,7 +60,7 @@ vcoco_single_test:
 		--eval \
 		--dataset_file vcoco \
 		--data_path v-coco \
-		--resume checkpoints/vcoco/vcoco_q16.pth
+		--resume checkpoints/vcoco/best.pth
 
 # [V-COCO] multi-gpu test (runs in 8 GPUs)
 vcoco_multi_test:

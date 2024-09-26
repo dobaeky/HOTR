@@ -26,7 +26,13 @@ class VCocoEvaluator(object):
 
     def update(self, outputs):
         img_ids = list(np.unique(list(outputs.keys())))
+        #flg=0
+        #cnt=0
         for img_num, img_id in enumerate(img_ids):
+            #if flg==0:
+            #    print(len(img_ids)) #4923
+            # 
+            #    flg=1
             print(f"Evaluating Score Matrix... : [{(img_num+1):>4}/{len(img_ids):<4}]" ,flush=True, end="\r")
             prediction = outputs[img_id]['prediction']
             target = outputs[img_id]['target']
